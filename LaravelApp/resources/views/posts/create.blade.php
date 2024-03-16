@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Post</title>
-</head>
-<body>
-    <h1>Create New Post</h1>
+@extends('layout.main')
+
+@section('title','Create Post')
+
+@section('content')
     <form action="{{ route('posts.store') }}" method="POST">
         @csrf
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title"><br>
-        <label for="content">Content:</label><br>
-        <textarea id="content" name="content"></textarea><br>
+        <label for="body">Body:</label><br>
+        <textarea id="body" name="body"></textarea><br>
         <button type="submit">Create</button>
     </form>
-</body>
-</html>
+@endsection

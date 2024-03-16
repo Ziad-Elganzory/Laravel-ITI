@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deleted Posts</title>
-</head>
-<body>
+@extends('layout.main')
+
+@section('title','Deleted Posts')
+
+@section('content')
     <h1>Deleted Posts</h1>
     <table border="1">
         <thead>
@@ -25,13 +22,19 @@
                 <td>{{ $post->created_at}}</td>
                 <td>{{ $post->updated_at}}</td>
                 <td>
-                    <form action="#" method="POST">
+                    <form action="{{ route('posts.restore', $post->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
                         <button type="submit">Restore</button>
+                    </form>
+                    <form action="{{ route('posts.forceDelete', $post->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Permanently Delete</button>
                     </form>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-</body>
-</html>
+@endsection

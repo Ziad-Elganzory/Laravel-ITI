@@ -22,14 +22,14 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'content' => 'required',
-        // ]);
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ]);
 
-        // Post::create($request->all());
+        Post::create($request->all());
 
-        Post::factory(1)->create();
+        // Post::factory(1)->create();
 
         return redirect()->route('posts.index')
                          ->with('success', 'Post created successfully.');
@@ -49,7 +49,7 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required',
+            'body' => 'required',
         ]);
 
         $post->update($request->all());
@@ -71,6 +71,23 @@ class PostController extends Controller
         $deletedPosts = Post::onlyTrashed()->get();
         return view('posts.deleted', compact('deletedPosts'));
     }
+
+    public function restore($id)
+    {
+        $post = Post::onlyTrashed()->findOrFail($id);
+        $post->restore();
+
+        return redirect()->route('posts.index')->with('success', 'Post restored successfully');
+    }
+
+    public function forceDelete($id)
+    {
+        $post = Post::onlyTrashed()->findOrFail($id);
+        $post->forceDelete();
+
+        return redirect()->route('posts.deleted')->with('success', 'Post permanently deleted');
+    }
+
 
 
 }

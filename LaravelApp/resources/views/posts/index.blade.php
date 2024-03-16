@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Posts</title>
-</head>
-<body>
-    <h1>All Posts</h1>
-    <a href="{{ route('posts.create') }}">Create New Post</a>
-    <br>
-    <a href="{{ route('posts.deleted') }}">View Deleted Posts</a>
-    <br>
+@extends('layout.main')
+
+@section('title','Index')
+
+@section('content')
+    <h1>Posts List</h1>
     <table border="1">
         <thead>
             <tr>
@@ -41,5 +34,4 @@
             @endforeach
         </tbody>
     </table>
-</body>
-</html>
+@endsection
