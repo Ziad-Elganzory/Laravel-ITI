@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest as StorePost;
+use App\Http\Requests\UpdatePostRequest as EditPost;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -13,26 +17,25 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-
+    public function user_show()
+    {
+        $users = User::all();
+        return view('users.index', compact('users'));
+    }
 
     public function create()
     {
         return view('posts.create');
     }
 
-    public function store(Request $request)
+    public function store(StorePost $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'body' => 'required',
-        ]);
-
-        Post::create($request->all());
-
-        // Post::factory(1)->create();
-
-        return redirect()->route('posts.index')
-                         ->with('success', 'Post created successfully.');
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+    
+        Post::create($data);
+    
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
     public function show(Post $post)
@@ -45,17 +48,12 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    public function update(Request $request, Post $post)
+    public function update(EditPost $request, Post $post)
     {
-        $request->validate([
-            'title' => 'required',
-            'body' => 'required',
-        ]);
-
-        $post->update($request->all());
-
-        return redirect()->route('posts.index')
-                         ->with('success', 'Post updated successfully');
+        $data = $request->validated();
+        $post->update($data);
+    
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }
 
     public function destroy(Post $post)
@@ -63,7 +61,7 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('posts.index')
-                         ->with('success', 'Post deleted successfully');
+            ->with('success', 'Post deleted successfully');
     }
 
     public function deleted()
@@ -87,7 +85,4 @@ class PostController extends Controller
 
         return redirect()->route('posts.deleted')->with('success', 'Post permanently deleted');
     }
-
-
-
 }
